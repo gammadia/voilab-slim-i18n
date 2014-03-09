@@ -50,7 +50,8 @@ class TwigExtension extends \Twig_Extension
 	 */
 	public function getFunctions() {
 		return array(
-			new \Twig_SimpleFunction('rootUri', array($this, 'rootUri'))
+			new \Twig_SimpleFunction('rootUri', array($this, 'rootUri')),
+            new \Twig_SimpleFunction('currentRoute', array($this, 'currentRoute'))
 		);
 	}
 
