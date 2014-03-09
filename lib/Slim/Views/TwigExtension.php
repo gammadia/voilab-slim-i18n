@@ -73,6 +73,6 @@ class TwigExtension extends \Twig_Extension
      */
     public function currentRoute($appName = 'default') {
         $request = Slim::getInstance($appName)->request();
-        return $request->getPath();
+        return $request->getPathInfo();
     }
 }
