@@ -1,14 +1,19 @@
 {
-    "name": "voilab/twig-extensions",
+    "name": "voilab/slim-extensions",
     "type": "library",
-    "description": "Some Twig extensions to use with Slim.",
+    "description": "Some Slim extensions made by Voilab.",
     "keywords": ["twig","slim"],
-    "homepage": "https://bitbucket.org/voilab/twig-extension",
+    "homepage": "https://bitbucket.org/voilab/slim-extensions",
     "license": "MIT",
     "authors": [
         {
             "name": "Alexandre Ravey",
             "email": "alexandre@voilab.org",
+            "homepage": "http://www.voilab.org",
+            "role": "Developer"
+        },{
+            "name": "Joel Poulin",
+            "email": "joel@voilab.org",
             "homepage": "http://www.voilab.org",
             "role": "Developer"
         }

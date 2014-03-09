@@ -13,7 +13,7 @@ Create a composer.json file in your project root:
 ```json
 {
     "require": {
-        "voilab/twig-extensions": "0.1.*"
+        "voilab/slim-extensions": "0.1.*"
     }
 }
 ```
