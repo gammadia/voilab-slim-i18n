@@ -63,4 +63,15 @@ class TwigExtension extends \Twig_Extension
 	public function rootUri($appName = 'default') {
 		return Slim::getInstance($appName)->request()->getRootUri();
 	}
+
+    /**
+     * Returns the current route displayed
+     *
+     * @param string $appName
+     * @return string
+     */
+    public function currentRoute($appName = 'default') {
+        $request = Slim::getInstance($appName)->request();
+        return $request->getPath();
+    }
 }
