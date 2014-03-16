@@ -62,6 +62,7 @@ class I18n extends \Slim\Middleware
                     $view->twigTemplateDirs = $this->settings['basePath'];
                 }
                 $view->set($this->settings['langParam'], $lang);
+                $view->set('defaultlang', $this->settings['defaultLang']);
                 break;
             default:
                 break;
