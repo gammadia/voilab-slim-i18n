@@ -34,36 +34,37 @@ use Slim\Slim;
 
 class TwigExtension extends \Twig_Extension
 {
-	/**
-	 * Returns the name of the extension.
-	 *
-	 * @return string The extension name
-	 */
-	public function getName() {
-		return 'voilab-slim';
-	}
+    /**
+     * Returns the name of the extension.
+     *
+     * @return string The extension name
+     */
+    public function getName() {
+        return 'voilab-slim';
+    }
 
-	/**
-	 * Returns a list of functions for Twig to expose.
-	 *
-	 * @return array List of functions
-	 */
-	public function getFunctions() {
-		return array(
-			new \Twig_SimpleFunction('rootUri', array($this, 'rootUri')),
-            new \Twig_SimpleFunction('currentRoute', array($this, 'currentRoute'))
-		);
-	}
+    /**
+     * Returns a list of functions for Twig to expose.
+     *
+     * @return array List of functions
+     */
+    public function getFunctions() {
+        return array(
+            new \Twig_SimpleFunction('rootUri', array($this, 'rootUri')),
+            new \Twig_SimpleFunction('currentRoute', array($this, 'currentRoute')),
+            new \Twig_SimpleFunction('urlForI18n', array($this, 'urlForI18n'))
+        );
+    }
 
-	/**
-	 * Returns a simple root URI for this application. Without the URL part.
-	 *
-	 * @param  string $appName Application name or 'default'
-	 * @return string          The base URI
-	 */
-	public function rootUri($appName = 'default') {
-		return Slim::getInstance($appName)->request()->getRootUri();
-	}
+    /**
+     * Returns a simple root URI for this application. Without the URL part.
+     *
+     * @param  string $appName Application name or 'default'
+     * @return string          The base URI
+     */
+    public function rootUri($appName = 'default') {
+        return Slim::getInstance($appName)->request()->getRootUri();
+    }
 
     /**
      * Returns the current route displayed
@@ -74,5 +75,10 @@ class TwigExtension extends \Twig_Extension
     public function currentRoute($appName = 'default') {
         $request = Slim::getInstance($appName)->request();
         return $request->getPathInfo();
+    }
+
+    public function urlForI18n($lang, $name, $params = array(), $appName = 'default') {
+        $slim = Slim::getInstance($appName);
+        return $slim->request->getRootUri() . '/' . $lang . $slim->router->urlFor($name, $params);
     }
 }
