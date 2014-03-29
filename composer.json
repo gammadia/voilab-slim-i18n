@@ -1,5 +1,5 @@
 {
-    "name": "voilab/twig-extensions",
+    "name": "voilab/slim-extensions",
     "type": "library",
     "description": "Some Twig extensions to use with Slim.",
     "keywords": ["twig","slim"],
