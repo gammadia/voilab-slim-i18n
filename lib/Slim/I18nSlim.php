@@ -42,7 +42,11 @@ class I18nSlim extends Slim {
      *  @return string         Url for the given resource
      */
     public function urlFor($name, $params = array()) {
-        $lang = $params['lang'] ?: $this->view->get('i18n.lang');
+        if (isset($params['lang'])) {
+            $lang = $params['lang'];
+        } else {
+            $lang = $this->view->get('i18n.lang');
+        }
 
         return $this->request->getRootUri() . '/' . $lang . $this->router->urlFor($name, $params);
     }
