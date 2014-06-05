@@ -73,6 +73,23 @@ class I18n extends \Slim\Middleware
     }
 
     /**
+     *  Return the corresponding language for an alias
+     *
+     *  @param  string $alias Alias
+     *
+     *  @return string        Language code
+     */
+    private function getLangByAlias($alias) {
+        foreach($this->app->container['settings']['i18n.langs'] as $lang => $lang_data) {
+            if (in_array($alias, $lang_data['alias'])) {
+                return $lang;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      *  Read the current language
      *
      *  @return [type] [description]
@@ -86,7 +103,10 @@ class I18n extends \Slim\Middleware
             //  We parse the Accept-Language header
             $matches = array_intersect($this->getAcceptLanguage(), $this->app->container['settings']['i18n.priority']);
             $activ_lang = array_shift($matches);
-        } else {
+            $activ_lang = $this->getLangByAlias($activ_lang);
+        }
+
+        if (!$activ_lang || $activ_lang === $this->app->container['settings']['i18n.default_lang']) {
             $pathInfo = $env['PATH_INFO'];
 
             if (strrpos($pathInfo, '/') !== 0) {
