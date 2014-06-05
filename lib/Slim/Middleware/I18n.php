@@ -1,21 +1,109 @@
 <?php
 namespace Voilab\Slim\Middleware;
 
- /**
-  * I18n
-  *
-  * This is middleware for a Slim application that reorganize
-  * the view templates directories to load first the chosen
-  * language, then the fallback.
-  *
-  * @package    Slim
-  * @author     Joel Poulin
-  * @since      1.0.0
-  */
+/**
+ * I18n
+ *
+ * This is middleware for a Slim application that reorganize
+ * the view templates directories to load first the chosen
+ * language, then the fallback.
+ *
+ * @package    Slim
+ * @author     Joel Poulin
+ * @author      Alexandre Ravey
+ * @link        http://www.voilab.org
+ * @copyright   2014 Voilab
+ * @version     0.1.0
+ *
+ *  Loosely based on http://nesbot.com/2012/6/26/multilingual-site-using-slim
+ *
+ * MIT LICENSE
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 class I18n extends \Slim\Middleware
 {
-
+    /**
+     *  Settings
+     *
+     *  @var array
+     */
     private $settings = array();
+
+    /**
+     *  Parse the Accept-Language header
+     *
+     *  @return array Array of languages without the q part.
+     */
+    private function getAcceptLanguage() {
+        $accept = null;
+        $env = $this->app->environment();
+
+        if (isset($env['HTTP_ACCEPT_LANGUAGE'])) {
+            $accept = $env['HTTP_ACCEPT_LANGUAGE'];
+        }
+
+        if (isset($env['ACCEPT_LANGUAGE'])) {
+            $accept = $env['ACCEPT_LANGUAGE'];
+        }
+
+        if (!$accept) {
+            return null;
+        }
+
+        return preg_split('/(;q=...)?,/i', $accept . ',', -1, PREG_SPLIT_NO_EMPTY);
+    }
+
+    /**
+     *  Read the current language
+     *
+     *  @return [type] [description]
+     */
+    private function getLang() {
+        $env = $this->app->environment();
+        $activ_lang = $this->app->container['settings']['i18n.default_lang'];
+
+        if ($env['PATH_INFO'] == '/') {
+            //  Webroot, no language defined.
+            //  We parse the Accept-Language header
+            $matches = array_intersect($this->getAcceptLanguage(), $this->app->container['settings']['i18n.priority']);
+            $activ_lang = array_shift($matches);
+        } else {
+            $pathInfo = $env['PATH_INFO'];
+
+            if (strrpos($pathInfo, '/') !== 0) {
+                $pathInfo .= '/';
+            }
+
+            //  Search a known language in the resource URL.
+            foreach($this->app->container['settings']['i18n.langs'] as $lang => $lang_data) {
+                if (strpos($pathInfo, '/' . $lang . '/') === 0) {
+                    $activ_lang = $lang;
+                    $env['PATH_INFO'] = str_replace('/' . $lang, '', $env['PATH_INFO']);
+                }
+            }
+        }
+
+        return $activ_lang;
+    }
 
     /**
      * Constructor
@@ -25,7 +113,7 @@ class I18n extends \Slim\Middleware
     {
         $defaults = array(
             'view' => 'twig',
-            'langParam' => 'lang',
+            'langParam' => 'i18n.lang',
             'basePath' => '',
             'translatedPath' => '',
             'defaultLang' => 'fr'
@@ -38,19 +126,9 @@ class I18n extends \Slim\Middleware
      */
     public function call()
     {
-        $lang = $this->settings['defaultLang'];
-
-        // check if a lang is already defined
-        if (isset($_SESSION[$this->settings['langParam']])) {
-            $lang = $_SESSION[$this->settings['langParam']];
-        }
-
-        // check if a lang was sent (overriding the already setted lang)
-        if ($this->app->request()->get($this->settings['langParam']) !== null) {
-            $_SESSION[$this->settings['langParam']] = $this->app->request()->get($this->settings['langParam']);
-            $lang = $_SESSION[$this->settings['langParam']];
-        }
+        $lang = $this->getLang();
         $view = $this->app->view();
+
         switch ($this->settings['view']) {
             case 'twig' :
                 if ($lang != $this->settings['defaultLang']) {
@@ -62,11 +140,11 @@ class I18n extends \Slim\Middleware
                     $view->twigTemplateDirs = $this->settings['basePath'];
                 }
                 $view->set($this->settings['langParam'], $lang);
-                $view->set('defaultlang', $this->settings['defaultLang']);
                 break;
             default:
                 break;
         }
+
         $this->next->call();
     }
 }
