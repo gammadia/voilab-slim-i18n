@@ -54,6 +54,7 @@ class TwigExtension extends \Twig_Extension
             new \Twig_SimpleFunction('currentRoute', array($this, 'currentRoute')),
             new \Twig_SimpleFunction('urlForI18n', array($this, 'urlForI18n')),
             new \Twig_SimpleFunction('currentRouteName', array($this, 'currentRouteName')),
+            new \Twig_SimpleFunction('currentRouteObject', array($this, 'currentRouteObject')),
             new \Twig_SimpleFunction('activeLang', array($this, 'activeLang'))
         );
     }
@@ -79,11 +80,16 @@ class TwigExtension extends \Twig_Extension
         return $request->getPathInfo();
     }
 
-    public function currentRouteName($appName = 'default') {
+    public function currentRouteObject($appName = 'default') {
         $current_route = Slim::getInstance($appName)->router()->getCurrentRoute();
         if (!$current_route) {
             $current_route = Slim::getInstance($appName)->router()->getNamedRoute('home');
         }
+        return $current_route;
+    }
+
+    public function currentRouteName($appName = 'default') {
+        $current_route = $this->currentRouteObject($appName);
         return $current_route->getName();
     }
 

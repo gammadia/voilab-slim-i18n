@@ -36,10 +36,12 @@ use Slim\Slim;
 
 class I18nSlim extends Slim {
     /**
-     *  Wrap Slim::urlFor() and prepend the language code
+     * Wrap Slim::urlFor() and prepend the language code
      *
-     *  @see Slim::urlFor()
-     *  @return string         Url for the given resource
+     * @see Slim::urlFor()
+     * @param string $name Route name
+     * @param array $params Array of parameters
+     * @return string Url for the given resource
      */
     public function urlFor($name, $params = array()) {
         if (isset($params['lang'])) {
@@ -49,5 +51,15 @@ class I18nSlim extends Slim {
         }
 
         return $this->request->getRootUri() . '/' . $lang . $this->router->urlFor($name, $params);
+    }
+
+    /**
+     * Récupération de la langue active
+     *
+     * @return string
+     */
+    public function guessActiveLang() {
+        $path = substr($this->request()->getPathInfo(), 1);
+        return substr($path, 0, 2);
     }
 }
