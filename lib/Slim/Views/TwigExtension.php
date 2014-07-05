@@ -52,7 +52,9 @@ class TwigExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('rootUri', array($this, 'rootUri')),
             new \Twig_SimpleFunction('currentRoute', array($this, 'currentRoute')),
-            new \Twig_SimpleFunction('urlForI18n', array($this, 'urlForI18n'))
+            new \Twig_SimpleFunction('urlForI18n', array($this, 'urlForI18n')),
+            new \Twig_SimpleFunction('currentRouteName', array($this, 'currentRouteName')),
+            new \Twig_SimpleFunction('activeLang', array($this, 'activeLang'))
         );
     }
 
@@ -77,8 +79,20 @@ class TwigExtension extends \Twig_Extension
         return $request->getPathInfo();
     }
 
+    public function currentRouteName($appName = 'default') {
+        $current_route = Slim::getInstance($appName)->router()->getCurrentRoute();
+        if (!$current_route) {
+            $current_route = Slim::getInstance($appName)->router()->getNamedRoute('home');
+        }
+        return $current_route->getName();
+    }
+
     public function urlForI18n($lang, $name, $params = array(), $appName = 'default') {
         $slim = Slim::getInstance($appName);
         return $slim->request->getRootUri() . '/' . $lang . $slim->router->urlFor($name, $params);
+    }
+
+    public function activeLang($appName = 'default') {
+        return Slim::getInstance($appName)->view()->get('i18n.lang');
     }
 }
