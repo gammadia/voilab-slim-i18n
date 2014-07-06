@@ -122,6 +122,11 @@ class I18n extends \Slim\Middleware
             }
         }
 
+        // au cas où vraiment on trouve pas de langue...
+        if (!$activ_lang) {
+            $activ_lang = $this->app->container['settings']['i18n.default_lang'];
+        }
+
         return $activ_lang;
     }
 
