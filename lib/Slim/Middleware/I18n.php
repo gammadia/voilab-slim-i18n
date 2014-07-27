@@ -92,7 +92,7 @@ class I18n extends \Slim\Middleware
     /**
      *  Read the current language
      *
-     *  @return [type] [description]
+     *  @return string
      */
     private function getLang() {
         $env = $this->app->environment();
@@ -117,9 +117,14 @@ class I18n extends \Slim\Middleware
             foreach($this->app->container['settings']['i18n.langs'] as $lang => $lang_data) {
                 if (strpos($pathInfo, '/' . $lang . '/') === 0) {
                     $activ_lang = $lang;
-                    $env['PATH_INFO'] = str_replace('/' . $lang, '', $env['PATH_INFO']);
+                    $env['PATH_INFO'] = substr($env['PATH_INFO'], 3);
                 }
             }
+        }
+
+        // au cas où vraiment on trouve pas de langue...
+        if (!$activ_lang) {
+            $activ_lang = $this->app->container['settings']['i18n.default_lang'];
         }
 
         return $activ_lang;
