@@ -66,7 +66,7 @@ class I18n extends \Slim\Middleware
         }
 
         if (!$accept) {
-            return null;
+            return array();
         }
 
         return preg_split('/(;q=...)?,/i', $accept . ',', -1, PREG_SPLIT_NO_EMPTY);
