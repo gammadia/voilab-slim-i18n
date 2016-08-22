@@ -69,7 +69,10 @@ class I18n extends \Slim\Middleware
             return array();
         }
 
-        return preg_split('/(;q=...)?,/i', $accept . ',', -1, PREG_SPLIT_NO_EMPTY);
+        // pour une raison ou une autre, Slim 2 détecte seulement l'anglais dans
+        // les headers avec Firefox. C'est pas un prob de firefox, parce qu'avec
+        // Slim 3 + firefox, on trouve le français. Zarb.
+        return array(); //preg_split('/(;q=...)?,/i', $accept . ',', -1, PREG_SPLIT_NO_EMPTY);
     }
 
     /**
