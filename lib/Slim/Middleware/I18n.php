@@ -159,7 +159,7 @@ class I18n extends \Slim\Middleware
 
         switch ($this->settings['view']) {
             case 'twig' :
-                if ($lang != $this->settings['defaultLang']) {
+                if ($lang != $this->settings['defaultLang'] && file_exists($this->settings['translatedPath'] . $lang)) {
                     $view->twigTemplateDirs = array(
                         $this->settings['translatedPath'] . $lang,
                         $this->settings['basePath']
