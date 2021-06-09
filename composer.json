@@ -1,25 +1,19 @@
 {
-    "name": "voilab/slim-extensions",
+    "name": "gammadia/voilab-slim-extensions",
     "type": "library",
-    "description": "Some Slim extensions made by Voilab.",
-    "keywords": ["twig","slim"],
-    "homepage": "https://bitbucket.org/voilab/slim-extensions",
+    "description": "Fork of voilab/slim-extensions with support for modern PHP versions.",
+    "replace": {
+        "voilab/slim-extensions": "^1.1"
+    },
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Alexandre Ravey",
-            "email": "alexandre@voilab.org",
-            "homepage": "http://www.voilab.org",
-            "role": "Developer"
-        },{
-            "name": "Joel Poulin",
-            "email": "joel@voilab.org",
-            "homepage": "http://www.voilab.org",
-            "role": "Developer"
-        }
-    ],
     "require": {
-        "php": ">=5.3.0"
+        "php": "^7.2|^8.0",
+        "gammadia/slim-2.x": "^2.6",
+        "twig/extensions": "^1.0"
+    },
+    "require-dev": {
+        "overtrue/phplint": "^2.4|^3.0",
+        "phpstan/phpstan": "^0.12"
     },
     "autoload": {
         "psr-4": {

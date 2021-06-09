@@ -50,7 +50,7 @@ class ContentTypes extends \Slim\Middleware\ContentTypes
 
     /**
      * Constructor
-     * @param array $settings
+     * @param mixed[] $settings
      */
     public function __construct($settings = array())
     {
@@ -61,6 +61,9 @@ class ContentTypes extends \Slim\Middleware\ContentTypes
         parent::__construct($defaults);
     }
 
+    /**
+     * @return mixed[]
+     */
     protected function parseRaw() {
         $data = $_POST;
         foreach ($_FILES as $file) {

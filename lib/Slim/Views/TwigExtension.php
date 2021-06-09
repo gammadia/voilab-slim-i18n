@@ -46,7 +46,7 @@ class TwigExtension extends \Twig_Extension
     /**
      * Returns a list of functions for Twig to expose.
      *
-     * @return array List of functions
+     * @return \Twig_SimpleFunction[] List of functions
      */
     public function getFunctions() {
         return array(
@@ -66,7 +66,7 @@ class TwigExtension extends \Twig_Extension
      * @return string          The base URI
      */
     public function rootUri($appName = 'default') {
-        return Slim::getInstance($appName)->request()->getRootUri();
+        return $this->slim($appName)->request()->getRootUri();
     }
 
     /**
@@ -76,29 +76,67 @@ class TwigExtension extends \Twig_Extension
      * @return string
      */
     public function currentRoute($appName = 'default') {
-        $request = Slim::getInstance($appName)->request();
+        $request = $this->slim($appName)->request();
         return $request->getPathInfo();
     }
 
+    /**
+     * @param string $appName
+     *
+     * @return \Slim\Route
+     */
     public function currentRouteObject($appName = 'default') {
-        $current_route = Slim::getInstance($appName)->router()->getCurrentRoute();
+        $slim = $this->slim($appName);
+        $current_route = $slim->router()->getCurrentRoute();
         if (!$current_route) {
-            $current_route = Slim::getInstance($appName)->router()->getNamedRoute('home');
+            $current_route = $slim->router()->getNamedRoute('home');
         }
+        /** @var \Slim\Route $current_route */
         return $current_route;
     }
 
+    /**
+     * @param string $appName
+     *
+     * @return string|null
+     */
     public function currentRouteName($appName = 'default') {
         $current_route = $this->currentRouteObject($appName);
         return $current_route->getName();
     }
 
+    /**
+     * @param string $lang
+     * @param string $name
+     * @param mixed[] $params
+     * @param string $appName
+     *
+     * @return string
+     */
     public function urlForI18n($lang, $name, $params = array(), $appName = 'default') {
-        $slim = Slim::getInstance($appName);
+        $slim = $this->slim($appName);
         return $slim->request->getRootUri() . '/' . $lang . $slim->router->urlFor($name, $params);
     }
 
+    /**
+     * @param string $appName
+     *
+     * @return mixed
+     */
     public function activeLang($appName = 'default') {
-        return Slim::getInstance($appName)->view()->get('i18n.lang');
+        return $this->slim($appName)->view()->get('i18n.lang');
+    }
+
+    /**
+     * @param string $appName
+     *
+     * @return Slim
+     */
+    private function slim($appName)
+    {
+        /** @var Slim $slim */
+        $slim = Slim::getInstance($appName);
+
+        return $slim;
     }
 }

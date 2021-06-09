@@ -44,14 +44,14 @@ class I18n extends \Slim\Middleware
     /**
      *  Settings
      *
-     *  @var array
+     *  @var mixed[]
      */
     private $settings = array();
 
     /**
      *  Parse the Accept-Language header
      *
-     *  @return array Array of languages without the q part.
+     *  @return mixed[] Array of languages without the q part.
      */
     private function getAcceptLanguage() {
         $accept = null;
@@ -80,7 +80,7 @@ class I18n extends \Slim\Middleware
      *
      *  @param  string $alias Alias
      *
-     *  @return string        Language code
+     *  @return string|null        Language code
      */
     private function getLangByAlias($alias) {
         foreach($this->app->container['settings']['i18n.langs'] as $lang => $lang_data) {
@@ -135,7 +135,7 @@ class I18n extends \Slim\Middleware
 
     /**
      * Constructor
-     * @param array $settings
+     * @param mixed[] $settings
      */
     public function __construct($settings = array())
     {
@@ -151,6 +151,8 @@ class I18n extends \Slim\Middleware
 
     /**
      * Call
+     *
+     * @return void
      */
     public function call()
     {

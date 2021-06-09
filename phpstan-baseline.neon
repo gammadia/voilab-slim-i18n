@@ -1,0 +1,7 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Access to an undefined property Slim\\\\View\\:\\:\\$twigTemplateDirs\\.$#"
+			count: 2
+			path: lib/Slim/Middleware/I18n.php
+

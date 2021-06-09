@@ -34,13 +34,16 @@ namespace Voilab\Slim;
 
 use Slim\Slim;
 
+/**
+ * @property \Slim\View $view
+ */
 class I18nSlim extends Slim {
     /**
      * Wrap Slim::urlFor() and prepend the language code
      *
      * @see Slim::urlFor()
      * @param string $name Route name
-     * @param array $params Array of parameters
+     * @param array<string, mixed> $params Array of parameters
      * @return string Url for the given resource
      */
     public function urlFor($name, $params = array()) {

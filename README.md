@@ -1,47 +1,16 @@
-# Slim Views
+Voilab Slim Extensions
+==========
 
-Simple extension for Twig and Slim.
+Learn more about it in its [documentation](https://bitbucket.org/voilab/slim-extensions/src/master/README.md).
 
-Shamelessly based on [Slim-Views](https://github.com/codeguy/Slim-Views) by [Josh Lockhart](https://github.com/codeguy) and [Andrew Smith](https://github.com/silentworks).
+A fork for modern days [![CI](https://github.com/gammadia/voilab-slim-extensions/actions/workflows/ci.yaml/badge.svg)](https://github.com/gammadia/voilab-slim-extensions/actions/workflows/ci.yaml)
+==========
 
-## How to Install
+This is a fork of `voilab/slim-extensions` adapted for modern PHP development, which supports :
 
-#### using [Composer](http://getcomposer.org/)
+* PHP `7.2` <-> `8.0`
 
-Create a composer.json file in your project root:
+The following changes were applied to the dev dependencies :
 
-```json
-{
-    "require": {
-        "voilab/slim-extensions": "0.1.*"
-    }
-}
-```
-
-Then run the following composer command:
-
-```bash
-$ php composer.phar install
-```
-
-#### Twig
-
-```php
-$view->parserExtensions = array(
-    new \Voilab\Slim\Views\TwigExtension(),
-);
-```
-
-__rootUri__
-
-Inside your Twig template you would write:
-
-    {{ rootUri() }}
-
-## Authors
-
-[Alexandre Ravey](http://www.voilab.org)
-
-## License
-
-MIT Public License
+* PHPStan baseline added to keep the code in good health
+* Add GitHub Actions for continuous integration
