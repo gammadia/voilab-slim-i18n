@@ -1,7 +1,7 @@
 {
-    "name": "gammadia/voilab-slim-extensions",
+    "name": "gammadia/voilab-slim-i18n",
     "type": "library",
-    "description": "Fork of voilab/slim-extensions with support for modern PHP versions.",
+    "description": "Partial split fork (contains only i18n related files) of voilab/slim-extensions with support for modern PHP versions.",
     "replace": {
         "voilab/slim-extensions": "^1.1"
     },
@@ -9,7 +9,7 @@
     "require": {
         "php": "^7.2|^8.0",
         "gammadia/slim-2.x": "^2.6",
-        "twig/extensions": "^1.0"
+        "twig/extensions": "^1.0|^2.0"
     },
     "require-dev": {
         "overtrue/phplint": "^2.4|^3.0",
